@@ -2,13 +2,13 @@
 <html lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>NV AR Facade Prototype</title>
+    <title>NV AR Facade Prototype - HungerStation Kitchens</title>
     
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
     <style>
-      body { margin: 0; overflow: hidden; background: #000; font-family: 'Courier New', Courier, monospace; }
+      body { margin: 0; overflow: hidden; background: #000; font-family: sans-serif; }
       #ui-layer {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(10, 10, 12, 0.9); z-index: 2;
@@ -16,18 +16,15 @@
         color: #fff; pointer-events: none; transition: opacity 0.4s ease-out;
       }
       .hidden { opacity: 0 !important; }
-      .bracket { border: 2px solid #FF9800; padding: 20px; position: relative; }
-      .bracket::before, .bracket::after { content: ''; position: absolute; width: 15px; height: 15px; border: 2px solid #0055FF; }
-      .bracket::before { top: -6px; left: -6px; border-right: none; border-bottom: none; }
-      .bracket::after { bottom: -6px; right: -6px; border-left: none; border-top: none; }
+      .brand-box { border: 2px solid #FFC107; padding: 20px; background: rgba(255, 152, 0, 0.15); border-radius: 8px; }
     </style>
   </head>
   
   <body>
     <div id="ui-layer">
-      <div class="bracket">
-        <h3 style="margin: 0; font-size: 16px; letter-spacing: 2px; color: #FF9800;">NV ARCHITECTURE</h3>
-        <p id="status-text" style="font-size: 12px; color: #0055FF; margin-top: 10px;">AWAITING VISUAL LOCK...</p>
+      <div class="brand-box">
+        <h3 style="margin: 0; font-size: 18px; letter-spacing: 1px; color: #FFC107;">HUNGERSTATION KITCHENS</h3>
+        <p id="status-text" style="font-size: 13px; color: #FFF; margin-top: 10px;">Initializing 3D Asset Engine...</p>
       </div>
     </div>
 
@@ -39,72 +36,104 @@
       vr-mode-ui="enabled: false" 
       device-orientation-permission-ui="enabled: false">
 
+      <a-assets id="asset-container">
+        <img id="hs-logo" src="./assets/logo.png">
+      </a-assets>
+
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0" id="target-anchor">
         
         <a-plane 
-          position="0 0 0.02" 
-          width="1.05" height="1.05" 
-          color="#0055FF" 
-          material="transparent: true; opacity: 0.6; wireframe: true"
-          animation="property: components.material.material.opacity; to: 0.1; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
+          position="0 0 0.01" width="1.1" height="1.1" color="#FF9800" 
+          material="transparent: true; opacity: 0.2;"
+          animation="property: components.material.material.opacity; to: 0.6; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
         </a-plane>
 
-        <a-plane 
-          position="0 -0.5 0.05" 
-          width="1.2" height="0.015" 
-          color="#FF9800" 
-          material="shader: flat; transparent: true; opacity: 0.9"
-          animation="property: position; to: 0 0.5 0.05; dir: alternate; dur: 2500; loop: true; easing: easeInOutSine">
+        <a-image 
+          src="#hs-logo" position="0 0.6 0.1" width="0.8" height="0.4" material="alphaTest: 0.5"
+          animation="property: position; to: 0 0.65 0.1; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
+        </a-image>
+
+        <a-text 
+          value="HUNGERSTATION KITCHENS" color="#FFFFFF" align="center" position="0 0.4 0.1" scale="0.6 0.6 0.6" font="kelsonsans">
+        </a-text>
+
+        <a-entity id="food-nodes">
+            <a-image class="dynamic-food" position="-0.35 0.1 0.15" width="0.35" height="0.35" material="alphaTest: 0.5"
+                animation="property: rotation; to: 0 10 0; dir: alternate; dur: 3000; loop: true;"></a-image>
+            
+            <a-image class="dynamic-food" position="0.35 0.1 0.2" width="0.35" height="0.35" material="alphaTest: 0.5"
+                animation="property: rotation; to: 0 -10 0; dir: alternate; dur: 2500; loop: true;"></a-image>
+            
+            <a-image class="dynamic-food" position="-0.35 -0.25 0.2" width="0.35" height="0.35" material="alphaTest: 0.5"
+                animation="property: rotation; to: 0 -15 0; dir: alternate; dur: 3500; loop: true;"></a-image>
+            
+            <a-image class="dynamic-food" position="0.35 -0.25 0.15" width="0.35" height="0.35" material="alphaTest: 0.5"
+                animation="property: rotation; to: 0 15 0; dir: alternate; dur: 2800; loop: true;"></a-image>
+        </a-entity>
+
+        <a-plane position="0 -0.6 0.15" width="0.6" height="0.15" color="#FFC107" material="shader: flat; border-radius: 5px;"
+          animation="property: scale; to: 1.05 1.05 1.05; dir: alternate; dur: 800; loop: true;">
+          <a-text value="EXPLORE MENU" color="#000000" align="center" position="0 0 0.01" scale="0.4 0.4 0.4" font="kelsonsans"></a-text>
         </a-plane>
-
-        <a-plane position="-0.5 0.5 0.03" width="0.1" height="0.01" color="#FFFFFF" material="transparent: true" animation="property: components.material.material.opacity; to: 0.2; dir: alternate; dur: 500; loop: true"></a-plane>
-        <a-plane position="-0.5 0.5 0.03" width="0.01" height="0.1" color="#FFFFFF" material="transparent: true" animation="property: components.material.material.opacity; to: 0.2; dir: alternate; dur: 500; loop: true"></a-plane>
-        
-        <a-plane position="0.5 -0.5 0.03" width="0.1" height="0.01" color="#FFFFFF" material="transparent: true" animation="property: components.material.material.opacity; to: 0.2; dir: alternate; dur: 500; loop: true"></a-plane>
-        <a-plane position="0.5 -0.5 0.03" width="0.01" height="0.1" color="#FFFFFF" material="transparent: true" animation="property: components.material.material.opacity; to: 0.2; dir: alternate; dur: 500; loop: true"></a-plane>
-
-        <a-text 
-          value="SYS.ONLINE // KITCHEN_HUB_01" 
-          color="#4CAF50" 
-          position="-0.45 0.55 0.1" 
-          scale="0.3 0.3 0.3"
-          font="monoid"
-          opacity="0.8">
-        </a-text>
-
-        <a-text 
-          value="HUNGERSTATION CLOUD" 
-          color="#FF9800" 
-          align="center" 
-          position="0 0.65 0.1" 
-          scale="0.7 0.7 0.7"
-          font="kelsonsans"
-          animation="property: position; to: 0 0.68 0.1; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine">
-        </a-text>
 
       </a-entity>
     </a-scene>
 
     <script>
+      // 1. AR Tracking UI Logic
       const sceneEl = document.querySelector('#ar-scene');
       const target = document.querySelector('#target-anchor');
       const uiLayer = document.querySelector('#ui-layer');
       const statusText = document.querySelector('#status-text');
 
       sceneEl.addEventListener("arReady", () => {
-        statusText.innerText = "CAMERA ACTIVE. SCAN FACADE ELEVATION.";
+        statusText.innerText = "CAMERA READY. SCAN FACADE.";
         statusText.style.color = "#4CAF50";
       });
 
-      target.addEventListener('targetFound', () => {
-        uiLayer.classList.add('hidden');
+      target.addEventListener('targetFound', () => { uiLayer.classList.add('hidden'); });
+      target.addEventListener('targetLost', () => { uiLayer.classList.remove('hidden'); });
+
+      // 2. The 37-Image Carousel Engine
+      const totalImages = 37;
+      const foodNodes = document.querySelectorAll('.dynamic-food');
+      
+      // Keep track of which image we are currently displaying to prevent duplicates
+      let currentImageIndex = 1;
+
+      // Function to assign a new image to a specific node
+      function cycleFoodImage(node) {
+        // Build the direct path to the next image in the sequence
+        const imagePath = `./assets/food${currentImageIndex}.png`;
+        
+        // Update the A-Frame element
+        node.setAttribute('src', imagePath);
+
+        // Pop animation effect (scale up then down slightly)
+        node.setAttribute('animation__pop', `property: scale; from: 0 0 0; to: 1 1 1; dur: 800; easing: easeOutElastic`);
+
+        // Move to the next image in your 37-item list, loop back to 1 if we hit the end
+        currentImageIndex++;
+        if (currentImageIndex > totalImages) {
+            currentImageIndex = 1;
+        }
+      }
+
+      // Initialize the first 4 images immediately
+      foodNodes.forEach(node => {
+          cycleFoodImage(node);
       });
 
-      target.addEventListener('targetLost', () => {
-        uiLayer.classList.remove('hidden');
-      });
+      // Set up the engine to swap images continuously
+      // Every 2.5 seconds, pick a random node and swap its food
+      setInterval(() => {
+          const randomNodeIndex = Math.floor(Math.random() * foodNodes.length);
+          const targetNode = foodNodes[randomNodeIndex];
+          cycleFoodImage(targetNode);
+      }, 2500);
+
     </script>
   </body>
 </html>

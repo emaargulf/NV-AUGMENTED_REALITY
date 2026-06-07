@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<!-- 
+  Developer/Author: archengsafdar@gmail.com
+  Project: NV WebAR Facade Prototype (Plural Filename Mismatch Fix)
+-->
 <html lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -12,9 +16,10 @@
       #scanning-overlay {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0, 0, 0, 0.7); z-index: 2;
-        display: flex; justify-content: center; align-items: center; text-align: center;
+        display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
         color: white; padding: 20px; pointer-events: none; transition: opacity 0.5s ease;
       }
+      #debug-log { font-size: 12px; color: #FF5722; margin-top: 10px; }
       .hidden { opacity: 0 !important; }
     </style>
   </head>
@@ -22,11 +27,14 @@
   <body>
     <div id="scanning-overlay">
       <h2>Point camera at the NV Facade Elevation</h2>
-      <p style="font-size: 14px; color: #FFC107;">Waiting for camera lock...</p>
+      <p id="status-text" style="font-size: 14px; color: #FFC107;">Initializing AR Engine...</p>
+      <div id="debug-log"></div>
     </div>
 
+    <!-- FIXED: Path pointed accurately to plural 'targets.mind' -->
     <a-scene 
-      mindar-image="imageTargetSrc: https://emaargulf.github.io/NV-AUGMENTED_REALITY/HUNGER_STATION_KITCHENS/assets/target.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001;" 
+      id="ar-scene"
+      mindar-image="imageTargetSrc: https://emaargulf.github.io/NV-AUGMENTED_REALITY/HUNGER_STATION_KITCHENS/assets/targets.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001;" 
       color-space="sRGB" 
       renderer="colorManagement: true, physicallyCorrectLights" 
       vr-mode-ui="enabled: false" 
@@ -36,6 +44,7 @@
 
       <a-entity mindar-image-target="targetIndex: 0" id="target-anchor">
         
+        <!-- Glow Layer -->
         <a-plane 
           position="0 0 0.01" 
           width="1.2" height="1.2" 
@@ -44,6 +53,7 @@
           animation="property: components.material.material.opacity; to: 0.5; dir: alternate; dur: 1200; loop: true; easing: easeInOutSine">
         </a-plane>
 
+        <!-- Mesh Layer -->
         <a-plane 
           position="0 0 0.05" 
           width="1" height="1" 
@@ -52,6 +62,7 @@
           animation="property: position; to: 0 0 0.15; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine">
         </a-plane>
 
+        <!-- Text Layer -->
         <a-text 
           value="NV FOOD HUB" 
           color="#FFFFFF" 
@@ -65,15 +76,27 @@
     </a-scene>
 
     <script>
+      const sceneEl = document.querySelector('#ar-scene');
       const target = document.querySelector('#target-anchor');
       const overlay = document.querySelector('#scanning-overlay');
+      const statusText = document.querySelector('#status-text');
+      const debugLog = document.querySelector('#debug-log');
 
-      // Hide text when locked onto the image
+      // Status monitors
+      sceneEl.addEventListener("arReady", () => {
+        statusText.innerText = "Target compiled successfully. Scanning...";
+        statusText.style.color = "#4CAF50";
+      });
+
+      sceneEl.addEventListener("arError", (event) => {
+        statusText.innerText = "AR Initialization Failed";
+        debugLog.innerText = "Error details: File path context or WebGL block error.";
+      });
+
       target.addEventListener('targetFound', () => {
         overlay.classList.add('hidden');
       });
 
-      // Show text if camera looks away
       target.addEventListener('targetLost', () => {
         overlay.classList.remove('hidden');
       });

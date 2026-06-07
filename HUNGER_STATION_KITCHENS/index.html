@@ -12,20 +12,13 @@
 
     :root {
       --yellow: #FFD000;
-      --yellow-dim: rgba(255, 208, 0, 0.15);
-      --dark: #111111;
-      --white: #FFFFFF;
+      --dark:   #111111;
+      --white:  #FFFFFF;
     }
 
-    body {
-      overflow: hidden;
-      background: var(--dark);
-      font-family: 'Nunito', sans-serif;
-    }
+    body { overflow: hidden; background: var(--dark); font-family: 'Nunito', sans-serif; }
 
-    /* ─────────────────────────────────────────
-       SCAN OVERLAY
-    ───────────────────────────────────────── */
+    /* ── SCAN OVERLAY ── */
     #overlay {
       position: fixed; inset: 0; z-index: 20;
       display: flex; flex-direction: column;
@@ -35,161 +28,124 @@
     }
     #overlay.gone { opacity: 0; pointer-events: none; }
 
-    /* Logo area */
     .ov-logo {
-      width: 120px; height: 120px;
+      width: 130px; height: 130px;
       background: var(--yellow);
-      border-radius: 28px;
+      border-radius: 30px;
       display: flex; align-items: center; justify-content: center;
-      margin-bottom: 28px;
-      position: relative;
-      animation: logo-breathe 3s ease-in-out infinite;
+      margin-bottom: 24px;
+      animation: breathe 3s ease-in-out infinite;
     }
-    @keyframes logo-breathe {
-      0%,100% { box-shadow: 0 0 0 0 rgba(255,208,0,0.4); }
-      50%      { box-shadow: 0 0 0 18px rgba(255,208,0,0); }
+    @keyframes breathe {
+      0%,100% { box-shadow: 0 0 0 0   rgba(255,208,0,0.45); }
+      50%      { box-shadow: 0 0 0 20px rgba(255,208,0,0);   }
     }
+    /* Logo image fills the yellow box, no extra padding */
     .ov-logo img {
-      width: 88px; height: 88px;
+      width: 100%; height: 100%;
       object-fit: contain;
+      padding: 12px;
+      border-radius: 30px;
     }
-    /* Fallback H if no logo loaded */
-    .ov-logo-h {
-      font-size: 56px; font-weight: 900;
-      color: var(--dark); line-height: 1;
+    .ov-logo-fallback {
+      font-size: 60px; font-weight: 900; color: var(--dark); display: none;
     }
 
     .ov-title {
-      font-size: 26px; font-weight: 900;
-      color: var(--white);
-      letter-spacing: -0.5px;
-      margin-bottom: 4px;
+      font-size: 28px; font-weight: 900; color: var(--white);
+      letter-spacing: -0.5px; margin-bottom: 4px;
     }
     .ov-sub {
-      font-size: 13px; font-weight: 700;
-      color: var(--yellow);
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 44px;
+      font-size: 12px; font-weight: 700; color: var(--yellow);
+      letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 40px;
     }
 
     /* Scan frame */
     .scan-box {
-      width: 220px; height: 220px;
-      position: relative;
-      margin-bottom: 36px;
+      width: 200px; height: 200px;
+      position: relative; margin-bottom: 32px;
     }
     .scan-box::before, .scan-box::after,
     .scan-box .c3, .scan-box .c4 {
       content: '';
-      position: absolute;
-      width: 32px; height: 32px;
+      position: absolute; width: 30px; height: 30px;
       border: 3px solid var(--yellow);
     }
-    .scan-box::before { top:0; left:0;  border-right:none; border-bottom:none; border-radius: 4px 0 0 0; }
-    .scan-box::after  { top:0; right:0; border-left:none;  border-bottom:none; border-radius: 0 4px 0 0; }
-    .scan-box .c3     { bottom:0; left:0;  border-right:none; border-top:none; border-radius: 0 0 0 4px; }
-    .scan-box .c4     { bottom:0; right:0; border-left:none;  border-top:none; border-radius: 0 0 4px 0; }
+    .scan-box::before { top:0; left:0;  border-right:none; border-bottom:none; border-radius:4px 0 0 0; }
+    .scan-box::after  { top:0; right:0; border-left:none;  border-bottom:none; border-radius:0 4px 0 0; }
+    .scan-box .c3 { bottom:0; left:0;  border-right:none; border-top:none; border-radius:0 0 0 4px; }
+    .scan-box .c4 { bottom:0; right:0; border-left:none;  border-top:none; border-radius:0 0 4px 0; }
 
     .scan-beam {
-      position: absolute;
-      left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent 0%, var(--yellow) 40%, var(--yellow) 60%, transparent 100%);
-      top: 0;
-      animation: beam 2.2s cubic-bezier(0.4,0,0.6,1) infinite;
+      position: absolute; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--yellow), transparent);
       box-shadow: 0 0 10px 2px rgba(255,208,0,0.5);
+      animation: beam 2.2s ease-in-out infinite;
     }
     @keyframes beam {
-      0%   { top: 10px; opacity: 0; }
+      0%   { top: 8px;  opacity: 0; }
       8%   { opacity: 1; }
       92%  { opacity: 1; }
-      100% { top: calc(100% - 10px); opacity: 0; }
+      100% { top: calc(100% - 8px); opacity: 0; }
     }
 
-    /* Instruction text inside scan box */
-    .scan-inner {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 8px;
-    }
     .scan-icon {
-      font-size: 38px; opacity: 0.25;
-      animation: icon-pulse 2s ease-in-out infinite;
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px; opacity: 0.22;
+      animation: ipulse 2s ease-in-out infinite;
     }
-    @keyframes icon-pulse {
-      0%,100% { opacity: 0.2; transform: scale(1); }
-      50%      { opacity: 0.45; transform: scale(1.08); }
-    }
+    @keyframes ipulse { 0%,100%{opacity:0.18;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.07)} }
 
-    /* Status */
     #status {
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,208,0,0.5);
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,208,0,0.45);
       transition: color 0.4s;
     }
     #status.ready { color: #4ade80; }
 
-    /* ─────────────────────────────────────────
-       HUD (after lock)
-    ───────────────────────────────────────── */
+    /* ── HUD (on target lock) ── */
     #hud {
       position: fixed; inset: 0; z-index: 15;
-      pointer-events: none;
-      opacity: 0; transition: opacity 0.5s ease;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.5s ease;
     }
     #hud.show { opacity: 1; }
 
     .hud-top {
       position: absolute; top: 0; left: 0; right: 0;
-      padding: 18px 20px;
+      padding: 16px 18px;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .hud-logo-chip {
-      background: var(--yellow);
-      border-radius: 10px;
-      padding: 6px 12px;
+    .hud-chip {
+      background: var(--yellow); border-radius: 10px;
+      padding: 6px 14px;
       display: flex; align-items: center; gap: 8px;
     }
-    .hud-logo-chip img {
-      width: 28px; height: 28px; object-fit: contain;
-    }
-    .hud-logo-chip-h {
-      font-size: 18px; font-weight: 900; color: var(--dark);
-    }
-    .hud-chip-label {
-      font-size: 11px; font-weight: 900;
-      color: var(--dark); letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-    .hud-lock-badge {
+    .hud-chip img { width: 26px; height: 26px; object-fit: contain; }
+    .hud-chip-fallback { font-size: 17px; font-weight: 900; color: var(--dark); display: none; }
+    .hud-chip-label { font-size: 11px; font-weight: 900; color: var(--dark); letter-spacing: 0.06em; text-transform: uppercase; }
+    .hud-badge {
       font-family: 'Space Mono', monospace;
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      color: #4ade80;
-      display: flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #4ade80; display: flex; align-items: center; gap: 6px;
     }
-    .lock-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%; background: #4ade80;
-      animation: blink 1.5s ease-in-out infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.2} }
+    .lock-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: blink 1.5s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
     a-scene { z-index: 1; }
   </style>
 </head>
 <body>
 
-<!-- ── OVERLAY ── -->
+<!-- ── SCAN OVERLAY ── -->
 <div id="overlay">
   <div class="ov-logo">
-    <img id="logo-big" src="./assets/logo.png" onerror="this.style.display='none'; document.querySelector('.ov-logo-h').style.display='flex'">
-    <div class="ov-logo-h" style="display:none">H</div>
+    <img src="./assets/logo.png"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+    <div class="ov-logo-fallback">H</div>
   </div>
   <div class="ov-title">HungerStation</div>
   <div class="ov-sub">Kitchens · AR Experience</div>
@@ -197,9 +153,7 @@
   <div class="scan-box">
     <div class="c3"></div><div class="c4"></div>
     <div class="scan-beam"></div>
-    <div class="scan-inner">
-      <div class="scan-icon">📷</div>
-    </div>
+    <div class="scan-icon">📷</div>
   </div>
 
   <div id="status">Initializing camera…</div>
@@ -208,14 +162,13 @@
 <!-- ── HUD ── -->
 <div id="hud">
   <div class="hud-top">
-    <div class="hud-logo-chip">
-      <img src="./assets/logo.png" onerror="this.style.display='none'">
-      <div class="hud-logo-chip-h" id="hud-h" style="display:none">H</div>
+    <div class="hud-chip">
+      <img src="./assets/logo.png"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+      <div class="hud-chip-fallback">H</div>
       <span class="hud-chip-label">Kitchens</span>
     </div>
-    <div class="hud-lock-badge">
-      <div class="lock-dot"></div> Tracking
-    </div>
+    <div class="hud-badge"><div class="lock-dot"></div> Tracking</div>
   </div>
 </div>
 
@@ -229,149 +182,120 @@
   device-orientation-permission-ui="enabled: false">
 
   <a-assets>
-    <img id="logo-ar" src="./assets/logo.png" crossorigin="anonymous">
+    <!-- Logo -->
+    <img id="ar-logo" src="./assets/logo.png" crossorigin="anonymous">
+    <!-- Vehicles — PNGs face RIGHT, so animation goes left → right -->
+    <img id="ar-car"  src="./assets/car.png"  crossorigin="anonymous">
+    <img id="ar-bike" src="./assets/bike.png" crossorigin="anonymous">
   </a-assets>
 
   <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
   <a-entity mindar-image-target="targetIndex: 0" id="anchor">
 
-    <!-- ── YELLOW BRAND GLOW on surface ── -->
-    <a-plane position="0 0 0.002" width="1.05" height="1.05"
-      color="#FFD000"
+    <!-- ══ SURFACE GLOW ══ -->
+    <a-plane position="0 0 0.002" width="1.05" height="1.05" color="#FFD000"
       material="transparent: true; opacity: 0.06;"
-      animation="property: components.material.material.opacity; to: 0.14; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine">
+      animation="property: components.material.material.opacity; to: 0.13; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine">
     </a-plane>
 
-    <!-- ── LOGO centered top ── -->
-    <a-image src="#logo-ar"
-      position="0 0.52 0.08"
-      width="0.55" height="0.18"
-      material="alphaTest: 0.4; transparent: true"
-      animation="property: position; to: 0 0.55 0.08; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine">
+    <!-- ══ LOGO — wide aspect, centered top ══
+         HungerStation logo is ~3.5:1 wide. 
+         width="0.7" height="0.2" gives a natural fit. -->
+    <a-image src="#ar-logo"
+      position="0 0.56 0.1"
+      width="0.7" height="0.2"
+      material="alphaTest: 0.3; transparent: true"
+      animation="property: position; to: 0 0.58 0.1; dir: alternate; dur: 2800; loop: true; easing: easeInOutSine">
     </a-image>
 
-    <!-- Yellow divider line under logo -->
-    <a-plane position="0 0.38 0.07"
-      width="0.42" height="0.003"
-      color="#FFD000"
-      material="shader: flat; transparent: true; opacity: 0.7">
+    <!-- Thin yellow rule below logo -->
+    <a-plane position="0 0.43 0.08" width="0.5" height="0.003" color="#FFD000"
+      material="shader: flat; transparent: true; opacity: 0.6">
     </a-plane>
 
-    <!-- ── FOOD DISHES – 4 floating plates in cross layout ── -->
+    <!-- ══ FOOD DISHES — 4 corner + 1 hero ══ -->
 
-    <!-- LEFT dish -->
-    <a-entity position="-0.3 0.08 0.18"
-      animation__y="property: position; to: -0.3 0.13 0.22; dir: alternate; dur: 2800; loop: true; easing: easeInOutSine"
-      animation__r="property: rotation; to: 0 14 0; dir: alternate; dur: 3200; loop: true; easing: easeInOutSine">
-      <a-image class="dish" width="0.3" height="0.3" material="alphaTest: 0.45; transparent: true"></a-image>
-      <!-- shadow plate -->
-      <a-ellipse position="0 -0.13 -0.02" radius-x="0.1" radius-y="0.04" color="#000000"
-        material="transparent: true; opacity: 0.2; side: double">
-      </a-ellipse>
+    <!-- Top-left -->
+    <a-entity position="-0.29 0.15 0.18"
+      animation__y="property: position; to: -0.29 0.2 0.22; dir: alternate; dur: 2800; loop: true; easing: easeInOutSine"
+      animation__r="property: rotation; to: 0 12 0; dir: alternate; dur: 3200; loop: true; easing: easeInOutSine">
+      <a-image class="dish" width="0.28" height="0.28" material="alphaTest: 0.45; transparent: true"></a-image>
     </a-entity>
 
-    <!-- RIGHT dish -->
-    <a-entity position="0.3 0.08 0.18"
-      animation__y="property: position; to: 0.3 0.04 0.24; dir: alternate; dur: 3400; loop: true; easing: easeInOutSine"
-      animation__r="property: rotation; to: 0 -14 0; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine">
-      <a-image class="dish" width="0.3" height="0.3" material="alphaTest: 0.45; transparent: true"></a-image>
-      <a-ellipse position="0 -0.13 -0.02" radius-x="0.1" radius-y="0.04" color="#000000"
-        material="transparent: true; opacity: 0.2; side: double">
-      </a-ellipse>
+    <!-- Top-right -->
+    <a-entity position="0.29 0.15 0.18"
+      animation__y="property: position; to: 0.29 0.1 0.24; dir: alternate; dur: 3400; loop: true; easing: easeInOutSine"
+      animation__r="property: rotation; to: 0 -12 0; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine">
+      <a-image class="dish" width="0.28" height="0.28" material="alphaTest: 0.45; transparent: true"></a-image>
     </a-entity>
 
-    <!-- BOTTOM-LEFT dish -->
-    <a-entity position="-0.3 -0.28 0.2"
-      animation__y="property: position; to: -0.3 -0.22 0.27; dir: alternate; dur: 3800; loop: true; easing: easeInOutSine"
-      animation__r="property: rotation; to: 0 -10 0; dir: alternate; dur: 4200; loop: true; easing: easeInOutSine">
-      <a-image class="dish" width="0.3" height="0.3" material="alphaTest: 0.45; transparent: true"></a-image>
-      <a-ellipse position="0 -0.13 -0.02" radius-x="0.1" radius-y="0.04" color="#000000"
-        material="transparent: true; opacity: 0.2; side: double">
-      </a-ellipse>
+    <!-- Bottom-left -->
+    <a-entity position="-0.29 -0.2 0.2"
+      animation__y="property: position; to: -0.29 -0.15 0.26; dir: alternate; dur: 3800; loop: true; easing: easeInOutSine"
+      animation__r="property: rotation; to: 0 -10 0; dir: alternate; dur: 4000; loop: true; easing: easeInOutSine">
+      <a-image class="dish" width="0.28" height="0.28" material="alphaTest: 0.45; transparent: true"></a-image>
     </a-entity>
 
-    <!-- BOTTOM-RIGHT dish -->
-    <a-entity position="0.3 -0.28 0.15"
-      animation__y="property: position; to: 0.3 -0.23 0.22; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine"
+    <!-- Bottom-right -->
+    <a-entity position="0.29 -0.2 0.15"
+      animation__y="property: position; to: 0.29 -0.15 0.22; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine"
       animation__r="property: rotation; to: 0 10 0; dir: alternate; dur: 3600; loop: true; easing: easeInOutSine">
-      <a-image class="dish" width="0.3" height="0.3" material="alphaTest: 0.45; transparent: true"></a-image>
-      <a-ellipse position="0 -0.13 -0.02" radius-x="0.1" radius-y="0.04" color="#000000"
-        material="transparent: true; opacity: 0.2; side: double">
-      </a-ellipse>
+      <a-image class="dish" width="0.28" height="0.28" material="alphaTest: 0.45; transparent: true"></a-image>
     </a-entity>
 
-    <!-- CENTER HERO dish (larger, featured) -->
-    <a-entity position="0 -0.1 0.28"
-      animation__y="property: position; to: 0 -0.04 0.36; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"
+    <!-- CENTER hero dish -->
+    <a-entity position="0 -0.04 0.3"
+      animation__y="property: position; to: 0 0.02 0.38; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"
       animation__r="property: rotation; to: 0 6 0; dir: alternate; dur: 2800; loop: true; easing: easeInOutSine">
-      <a-image id="hero-dish" class="dish" width="0.38" height="0.38" material="alphaTest: 0.45; transparent: true"></a-image>
-      <!-- Yellow halo ring around hero -->
-      <a-ring position="0 -0.02 -0.03"
-        radius-inner="0.19" radius-outer="0.205"
-        color="#FFD000"
-        material="transparent: true; opacity: 0.6; side: double"
+      <a-image class="dish" id="hero-dish" width="0.36" height="0.36" material="alphaTest: 0.45; transparent: true"></a-image>
+      <!-- orbit ring -->
+      <a-ring position="0 0 -0.02" radius-inner="0.185" radius-outer="0.2" color="#FFD000"
+        material="transparent: true; opacity: 0.55; side: double"
         animation="property: rotation; to: 0 0 360; dur: 5000; loop: true; easing: linear">
       </a-ring>
-      <a-ellipse position="0 -0.16 -0.04" radius-x="0.13" radius-y="0.05" color="#000000"
-        material="transparent: true; opacity: 0.25; side: double">
-      </a-ellipse>
     </a-entity>
 
-    <!-- ── DELIVERY CAR driving across bottom ── -->
-    <!-- Car body (yellow box) -->
-    <a-entity id="car-group"
-      position="-0.85 -0.58 0.12"
-      animation="property: position; from: -0.85 -0.58 0.12; to: 0.85 -0.58 0.12; dur: 4000; loop: true; easing: linear">
-
-      <!-- Main car body -->
-      <a-box position="0 0.025 0" width="0.22" height="0.1" depth="0.08"
-        color="#FFD000" material="shader: flat">
-      </a-box>
-      <!-- Cab (top) -->
-      <a-box position="0.02 0.095 0" width="0.12" height="0.07" depth="0.075"
-        color="#FFD000" material="shader: flat">
-      </a-box>
-      <!-- Windshield dark -->
-      <a-box position="0.06 0.095 0" width="0.03" height="0.055" depth="0.072"
-        color="#222222" material="shader: flat">
-      </a-box>
-      <!-- Wheels - front -->
-      <a-cylinder position="0.065 -0.038 0.045" rotation="90 0 0"
-        radius="0.028" height="0.018" color="#222222" material="shader: flat"
-        animation="property: rotation; from: 90 0 0; to: 90 1440 0; dur: 4000; loop: true; easing: linear">
-      </a-cylinder>
-      <a-cylinder position="0.065 -0.038 -0.045" rotation="90 0 0"
-        radius="0.028" height="0.018" color="#222222" material="shader: flat"
-        animation="property: rotation; from: 90 0 0; to: 90 1440 0; dur: 4000; loop: true; easing: linear">
-      </a-cylinder>
-      <!-- Wheels - rear -->
-      <a-cylinder position="-0.065 -0.038 0.045" rotation="90 0 0"
-        radius="0.028" height="0.018" color="#222222" material="shader: flat"
-        animation="property: rotation; from: 90 0 0; to: 90 1440 0; dur: 4000; loop: true; easing: linear">
-      </a-cylinder>
-      <a-cylinder position="-0.065 -0.038 -0.045" rotation="90 0 0"
-        radius="0.028" height="0.018" color="#222222" material="shader: flat"
-        animation="property: rotation; from: 90 0 0; to: 90 1440 0; dur: 4000; loop: true; easing: linear">
-      </a-cylinder>
-      <!-- Small headlight dot -->
-      <a-sphere position="0.112 0.02 0.03" radius="0.008" color="#FFFFAA" material="shader: flat"></a-sphere>
-      <a-sphere position="0.112 0.02 -0.03" radius="0.008" color="#FFFFAA" material="shader: flat"></a-sphere>
-    </a-entity>
-
-    <!-- Ground line (road) -->
-    <a-plane position="0 -0.63 0.1" width="1.1" height="0.004"
-      color="#FFD000" material="shader: flat; transparent: true; opacity: 0.3">
+    <!-- ══ ROAD LANES ══ -->
+    <!-- Lane 1 — car lane (slightly higher) -->
+    <a-plane position="0 -0.56 0.06" width="1.08" height="0.003"
+      color="#FFD000" material="shader: flat; transparent: true; opacity: 0.35">
+    </a-plane>
+    <!-- Lane 2 — bike lane (lower) -->
+    <a-plane position="0 -0.66 0.06" width="1.08" height="0.002"
+      color="#FFD000" material="shader: flat; transparent: true; opacity: 0.2">
     </a-plane>
 
-    <!-- ── "ORDER NOW" CTA chip ── -->
-    <a-entity position="0 -0.72 0.08">
-      <a-plane width="0.44" height="0.1" color="#FFD000"
-        material="shader: flat">
-      </a-plane>
+    <!-- ══ CAR — PNG faces right, moves left → right ══
+         width="0.28" height="0.14" keeps real car proportions (~2:1) -->
+    <a-image src="#ar-car"
+      position="-0.9 -0.52 0.1"
+      width="0.28" height="0.14"
+      material="alphaTest: 0.35; transparent: true"
+      animation="property: position; from: -0.9 -0.52 0.1; to: 0.9 -0.52 0.1; dur: 5000; loop: true; easing: linear">
+    </a-image>
+
+    <!-- ══ BIKE — PNG faces right, moves left → right, offset start so they stagger ══
+         width="0.18" height="0.14" — bikes are roughly square/tall -->
+    <a-image src="#ar-bike"
+      position="0.2 -0.62 0.09"
+      width="0.18" height="0.14"
+      material="alphaTest: 0.35; transparent: true"
+      animation="property: position; from: 0.2 -0.62 0.09; to: 1.2 -0.62 0.09; dur: 3500; loop: true; easing: linear">
+    </a-image>
+    <!-- Second bike instance with different start for continuous feel -->
+    <a-image src="#ar-bike"
+      position="-0.7 -0.62 0.09"
+      width="0.18" height="0.14"
+      material="alphaTest: 0.35; transparent: true"
+      animation="property: position; from: -0.7 -0.62 0.09; to: 1.2 -0.62 0.09; dur: 3500; loop: true; easing: linear; delay: 1750">
+    </a-image>
+
+    <!-- ══ ORDER NOW CTA ══ -->
+    <a-entity position="0 -0.75 0.08">
+      <a-plane width="0.42" height="0.09" color="#FFD000" material="shader: flat"></a-plane>
       <a-text value="ORDER NOW" color="#111111" align="center"
-        font="kelsonsans"
-        position="0 0 0.01" scale="0.38 0.38 0.38">
+        font="kelsonsans" position="0 0 0.01" scale="0.36 0.36 0.36">
       </a-text>
     </a-entity>
 
@@ -379,66 +303,52 @@
 </a-scene>
 
 <script>
-  const scene    = document.querySelector('#scene');
-  const anchor   = document.querySelector('#anchor');
-  const overlay  = document.querySelector('#overlay');
-  const hud      = document.querySelector('#hud');
-  const status   = document.querySelector('#status');
-  const hudH     = document.querySelector('#hud-h');
-
-  // Show fallback H in HUD if logo missing
-  document.querySelector('#scene').addEventListener('loaded', () => {
-    const hudLogoImg = document.querySelector('.hud-logo-chip img');
-    if (hudLogoImg && hudLogoImg.naturalWidth === 0) {
-      hudLogoImg.style.display = 'none';
-      hudH.style.display = 'flex';
-    }
-  });
+  const scene   = document.querySelector('#scene');
+  const anchor  = document.querySelector('#anchor');
+  const overlay = document.querySelector('#overlay');
+  const hud     = document.querySelector('#hud');
+  const status  = document.querySelector('#status');
 
   scene.addEventListener('arReady', () => {
     status.textContent = 'Point camera at the facade';
     status.classList.add('ready');
   });
-
   scene.addEventListener('arError', () => {
     status.textContent = 'Error — check file paths';
   });
-
   anchor.addEventListener('targetFound', () => {
     overlay.classList.add('gone');
     hud.classList.add('show');
   });
-
   anchor.addEventListener('targetLost', () => {
     overlay.classList.remove('gone');
     hud.classList.remove('show');
   });
 
-  // ── Dish carousel: 37 food PNGs, 5 slots ──
-  const TOTAL = 37;
-  const BASE  = './assets/food';
+  // ── Dish carousel: food1.png … food37.png across 5 slots ──
+  const TOTAL  = 37;
   const dishes = Array.from(document.querySelectorAll('.dish'));
   let idx = 1;
 
   function nextPath() {
-    const p = `${BASE}${idx}.png`;
+    const p = `./assets/food${idx}.png`;
     idx = (idx % TOTAL) + 1;
     return p;
   }
 
-  // Initial staggered load
+  // Staggered initial load
   dishes.forEach((d, i) => setTimeout(() => {
     d.setAttribute('src', nextPath());
     d.setAttribute('animation__pop',
       'property: scale; from: 0 0 0; to: 1 1 1; dur: 600; easing: easeOutElastic');
-  }, i * 500));
+  }, i * 480));
 
-  // Swap one random dish every 2.8s
+  // Swap a random dish every 2.8 s
   setInterval(() => {
     const d = dishes[Math.floor(Math.random() * dishes.length)];
     d.setAttribute('animation__pop',
       'property: scale; from: 0.5 0.5 0.5; to: 1 1 1; dur: 600; easing: easeOutElastic');
-    setTimeout(() => d.setAttribute('src', nextPath()), 50);
+    setTimeout(() => d.setAttribute('src', nextPath()), 60);
   }, 2800);
 </script>
 </body>

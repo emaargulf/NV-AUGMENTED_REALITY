@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!-- 
-  Developer/Author: archengsafdar@gmail.com
-  Project: NV WebAR Facade Prototype (Plural Filename Mismatch Fix)
--->
 <html lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -15,28 +11,32 @@
       body { margin: 0; overflow: hidden; font-family: sans-serif; }
       #scanning-overlay {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.7); z-index: 2;
+        background: rgba(10, 10, 15, 0.85); z-index: 2;
         display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
         color: white; padding: 20px; pointer-events: none; transition: opacity 0.5s ease;
       }
-      #debug-log { font-size: 12px; color: #FF5722; margin-top: 10px; }
       .hidden { opacity: 0 !important; }
+      .spinner {
+        width: 40px; height: 40px; border: 4px solid rgba(255,193,7,0.1);
+        border-top: 4px solid #FFC107; border-radius: 50%;
+        animation: spin 1s linear infinite; margin-bottom: 15px;
+      }
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
   </head>
   
   <body>
     <div id="scanning-overlay">
-      <h2>Point camera at the NV Facade Elevation</h2>
-      <p id="status-text" style="font-size: 14px; color: #FFC107;">Initializing AR Engine...</p>
-      <div id="debug-log"></div>
+      <div class="spinner"></div>
+      <h2 style="margin:0; font-size: 20px; letter-spacing: 1px;">NV × HUNGERSTATION</h2>
+      <p id="status-text" style="font-size: 13px; color: #FFC107; margin: 8px 0 0 0;">Initializing AR Target Mapping...</p>
     </div>
 
-    <!-- FIXED: Path pointed accurately to plural 'targets.mind' -->
     <a-scene 
       id="ar-scene"
-      mindar-image="imageTargetSrc: https://emaargulf.github.io/NV-AUGMENTED_REALITY/HUNGER_STATION_KITCHENS/assets/targets.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001;" 
+      mindar-image="imageTargetSrc: https://emaargulf.github.io/NV-AUGMENTED_REALITY/HUNGER_STATION_KITCHENS/assets/targets.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.005;" 
       color-space="sRGB" 
-      renderer="colorManagement: true, physicallyCorrectLights" 
+      renderer="colorManagement: true, physicallyCorrectLights: true" 
       vr-mode-ui="enabled: false" 
       device-orientation-permission-ui="enabled: false">
 
@@ -44,32 +44,61 @@
 
       <a-entity mindar-image-target="targetIndex: 0" id="target-anchor">
         
-        <!-- Glow Layer -->
         <a-plane 
           position="0 0 0.01" 
-          width="1.2" height="1.2" 
+          width="1.3" height="1.3" 
+          color="#FF9800" 
+          material="transparent: true; opacity: 0.1;"
+          animation="property: components.material.material.opacity; to: 0.4; dir: alternate; dur: 1500; loop: true; easing: easeInOutQuad">
+        </a-plane>
+
+        <a-ring 
+          position="0 0 0.03" 
+          radius-inner="0.5" radius-outer="0.55" 
           color="#FFC107" 
-          material="transparent: true; opacity: 0;"
-          animation="property: components.material.material.opacity; to: 0.5; dir: alternate; dur: 1200; loop: true; easing: easeInOutSine">
-        </a-plane>
+          material="transparent: true; opacity: 0.6; side: double"
+          animation="property: rotation; to: 0 0 360; dur: 8000; loop: true; easing: linear">
+        </a-ring>
 
-        <!-- Mesh Layer -->
-        <a-plane 
-          position="0 0 0.05" 
-          width="1" height="1" 
-          color="#0055FF" 
-          material="transparent: true; opacity: 0.3; wireframe: true"
-          animation="property: position; to: 0 0 0.15; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine">
-        </a-plane>
+        <a-entity 
+          position="0 0.1 0.15" 
+          scale="0.25 0.25 0.25"
+          animation__float="property: position; to: 0 0.22 0.25; dir: alternate; dur: 2500; loop: true; easing: easeInOutSine"
+          animation__rotate="property: rotation; to: 0 360 0; dur: 6000; loop: true; easing: linear">
+          
+          <a-sphere position="0 0.3 0" radius="0.6" scale="1 0.5 1" color="#E5A65D"></a-sphere>
+          <a-cylinder position="0 0.15 0" radius="0.65" height="0.05" color="#4CAF50"></a-cylinder>
+          <a-cylinder position="0 0.02 0" radius="0.62" height="0.15" color="#5D4037"></a-cylinder>
+          <a-cylinder position="0 -0.15 0" radius="0.6" height="0.15" color="#E5A65D"></a-cylinder>
+        </a-entity>
 
-        <!-- Text Layer -->
+        <a-entity position="0 0 0.1" animation="property: rotation; to: 0 0 -360; dur: 5000; loop: true; easing: linear">
+          <a-cone 
+            position="0.45 0 0" 
+            rotation="0 0 -90"
+            radius-bottom="0.04" radius-top="0" height="0.1" 
+            color="#0055FF"
+            animation="property: scale; to: 1.3 1.3 1.3; dir: alternate; dur: 4000; loop: true;">
+          </a-cone>
+        </a-entity>
+
         <a-text 
-          value="NV FOOD HUB" 
+          value="HUNGERSTATION" 
+          color="#FF9800" 
+          align="center" 
+          font="kelsonsans"
+          position="0 0.65 0.12" 
+          scale="0.9 0.9 0.9"
+          animation="property: position; to: 0 0.68 0.18; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
+        </a-text>
+
+        <a-text 
+          value="DIGITAL KITCHEN HUB" 
           color="#FFFFFF" 
           align="center" 
-          position="0 0.6 0.1" 
-          scale="0.8 0.8 0.8"
-          animation="property: position; to: 0 0.65 0.1; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
+          font="kelsonsans"
+          position="0 -0.65 0.1" 
+          scale="0.5 0.5 0.5">
         </a-text>
 
       </a-entity>
@@ -80,17 +109,10 @@
       const target = document.querySelector('#target-anchor');
       const overlay = document.querySelector('#scanning-overlay');
       const statusText = document.querySelector('#status-text');
-      const debugLog = document.querySelector('#debug-log');
 
-      // Status monitors
       sceneEl.addEventListener("arReady", () => {
-        statusText.innerText = "Target compiled successfully. Scanning...";
+        statusText.innerText = "Camera Active. Scan the Presentation Slide.";
         statusText.style.color = "#4CAF50";
-      });
-
-      sceneEl.addEventListener("arError", (event) => {
-        statusText.innerText = "AR Initialization Failed";
-        debugLog.innerText = "Error details: File path context or WebGL block error.";
       });
 
       target.addEventListener('targetFound', () => {
